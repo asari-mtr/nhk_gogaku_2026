@@ -29,29 +29,38 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Inject analytics tokens from Secrets
+      - name: Inject analytics & verification tokens from Secrets
         env:
           CF_ANALYTICS_TOKEN: ${{ secrets.CF_ANALYTICS_TOKEN }}
           GA_MEASUREMENT_ID: ${{ secrets.GA_MEASUREMENT_ID }}
           GOATCOUNTER_URL: ${{ secrets.GOATCOUNTER_URL }}
+          GSC_VERIFICATION: ${{ secrets.GSC_VERIFICATION }}
         run: |
           set -e
           target=docs/index.html
-          # secret が空でもエラーにはしない。空のままなら本体JSが読み込みをスキップ
+          # secret が空でもエラーにはしない。空のままなら meta タグを除去し、
+          # 本体JSはプレースホルダー検知でスクリプト読み込みをスキップする
           python3 - <<PY
-          import os, pathlib
+          import os, pathlib, re
           path = pathlib.Path("$target")
           html = path.read_text(encoding="utf-8")
           subs = {
               "__CF_ANALYTICS_TOKEN__": os.environ.get("CF_ANALYTICS_TOKEN", ""),
               "__GA_MEASUREMENT_ID__":  os.environ.get("GA_MEASUREMENT_ID",  ""),
               "__GOATCOUNTER_URL__":    os.environ.get("GOATCOUNTER_URL",    ""),
+              "__GSC_VERIFICATION__":   os.environ.get("GSC_VERIFICATION",   ""),
           }
           for k, v in subs.items():
               if k in html:
                   if v:
                       print(f"injecting {k}")
                   html = html.replace(k, v)
+          # GSC verification は空なら meta タグごと削除 (空contentで誤判定されないように)
+          html = re.sub(
+              r'\s*<meta name="google-site-verification" content="">\n?',
+              "\n",
+              html,
+          )
           path.write_text(html, encoding="utf-8")
           PY
 

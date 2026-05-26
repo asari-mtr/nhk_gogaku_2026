@@ -62,8 +62,9 @@ https://asari-mtr.github.io/nhk_gogaku_2026/
 | `CF_ANALYTICS_TOKEN` | Cloudflare → Web Analytics → 新規サイト追加で発行される token |
 | `GA_MEASUREMENT_ID` | GA4 → 管理 → データストリーム → 測定ID (`G-XXXXXXXXXX`) |
 | `GOATCOUNTER_URL` | `https://<your-code>.goatcounter.com/count` |
+| `GSC_VERIFICATION` | Google Search Console → 「HTMLタグ」確認方法の `content="..."` 値のみ (タグ全体ではなく中身の英数字部分) |
 
-3つとも登録不要、1つだけでも複数併用でも可。**Secrets はリポジトリにコミットされず、Actions の実行時にしか参照できない** ので公開リポジトリでも安全です。
+すべて任意。1つも登録しなくても、いくつ併用しても可。**Secrets はリポジトリにコミットされず、Actions の実行時にしか参照できない** ので公開リポジトリでも安全です。
 
 ### 動作
 
@@ -87,10 +88,14 @@ https://asari-mtr.github.io/nhk_gogaku_2026/
 
 ### Google Search Console
 
-1. [https://search.google.com/search-console/](https://search.google.com/search-console/) でプロパティ追加 (`https://asari-mtr.github.io/nhk_gogaku_2026/`)
-2. URL プレフィックスを選択 → 所有権確認は HTML タグ方式が楽
-   - 表示された `<meta name="google-site-verification" content="...">` を Secret `GSC_VERIFICATION` 経由で `docs/index.html` に注入する形にしてもよい (現状は未対応、必要なら同様の仕組みで追加可能)
-3. サイトマップ送信: `https://asari-mtr.github.io/nhk_gogaku_2026/sitemap.xml`
+1. [https://search.google.com/search-console/](https://search.google.com/search-console/) でプロパティ追加
+   - 「URL プレフィックス」方式を選択: `https://asari-mtr.github.io/nhk_gogaku_2026/`
+2. 所有権確認は **HTMLタグ方式** が楽
+   - 表示される `<meta name="google-site-verification" content="ABC...">` の `content` 部分（タグ全体ではなく英数字だけ）をコピー
+   - GitHub Secrets に `GSC_VERIFICATION` として登録
+   - workflow_dispatch で再デプロイ → 公開HTMLに meta タグが入る
+   - Search Console 画面で「確認」を押すと所有権確認完了
+3. サイトマップ送信: 「サイトマップ」メニュー → `sitemap.xml` を送信
 4. 「検索パフォーマンス」で表示クエリ / クリック率 / 平均掲載順位を確認
 
 ### リッチリザルトテスト
