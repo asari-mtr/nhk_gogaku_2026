@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f6f4ee">
+<meta name="description" content="NHKラジオ語学番組の聴き逃し配信を Mac/Linux で自動DL、iPhone の Podcast アプリで聴く。Web UI 付きのオープンソースツール。">
+<meta property="og:title" content="nhk_gogaku_2026">
+<meta property="og:description" content="NHKラジオ語学を毎日自動DL、iPhoneのPodcastアプリで聴く。">
+<meta property="og:type" content="website">
+<title>nhk_gogaku_2026 - NHK語学を自動DL → iPhoneでPodcast</title>
+<link rel="stylesheet" href="style.css?v=1">
+</head>
+<body>
+
+<!-- ─── NAV ─── -->
+<nav class="nav">
+  <div class="container nav-inner">
+    <a href="#top" class="brand">
+      <span class="brand-icon">🎙</span>
+      <span>nhk_gogaku_2026</span>
+    </a>
+    <div class="nav-links">
+      <a href="#features">特徴</a>
+      <a href="#install">インストール</a>
+      <a href="#how">使い方</a>
+      <a href="#faq">FAQ</a>
+      <a class="github-link" href="https://github.com/asari-mtr/nhk_gogaku_2026" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M12 .5C5.4.5 0 5.9 0 12.5c0 5.3 3.4 9.8 8.2 11.4.6.1.8-.3.8-.6v-2.1c-3.3.7-4-1.6-4-1.6-.5-1.3-1.3-1.7-1.3-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1.1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.8-1.6-2.7-.3-5.5-1.3-5.5-5.9 0-1.3.5-2.4 1.2-3.2-.1-.3-.5-1.5.1-3.2 0 0 1-.3 3.3 1.2 1-.3 2-.4 3-.4s2 .1 3 .4c2.3-1.5 3.3-1.2 3.3-1.2.6 1.7.2 2.9.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.8-1.6 8.2-6.1 8.2-11.4C24 5.9 18.6.5 12 .5z"/></svg>
+        GitHub
+      </a>
+    </div>
+  </div>
+</nav>
+
+<!-- ─── HERO ─── -->
+<header id="top" class="hero">
+  <div class="container hero-inner">
+    <div class="hero-icon" aria-hidden="true">🎙</div>
+    <h1 class="hero-title">
+      NHK ラジオ語学を、<br>
+      毎日 <span class="accent">自動 DL</span> して <span class="accent">Podcast</span> で聴く。
+    </h1>
+    <p class="hero-lead">
+      聴き逃し配信は約1週間で消える。<br>
+      Mac (または Linux) に常駐させて、毎朝勝手にエピソードを蓄積。<br>
+      iPhone の Apple Podcasts で購読すれば、通勤中もオフライン再生できる。
+    </p>
+
+    <!-- Install command box (brew.sh style) -->
+    <div class="install-box" id="install-hero">
+      <div class="install-prompt">$</div>
+      <code id="install-cmd">/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/asari-mtr/nhk_gogaku_2026/main/bootstrap.sh)"</code>
+      <button class="copy-btn" data-copy="#install-cmd" aria-label="コマンドをコピー">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+        <span class="copy-label">コピー</span>
+      </button>
+    </div>
+
+    <div class="hero-meta">
+      macOS / Linux / WSL 対応 ·
+      <a href="https://github.com/asari-mtr/nhk_gogaku_2026" target="_blank" rel="noopener">MIT-ish ライセンス</a>
+      · 個人利用前提
+    </div>
+  </div>
+  <!-- 装飾: 音波SVG -->
+  <svg class="wave-bg" viewBox="0 0 1200 120" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M0,40 Q150,80 300,40 T600,40 T900,40 T1200,40 V120 H0 Z" fill="rgba(47,107,79,0.06)"/>
+    <path d="M0,60 Q150,100 300,60 T600,60 T900,60 T1200,60 V120 H0 Z" fill="rgba(47,107,79,0.08)"/>
+  </svg>
+</header>
+
+<!-- ─── 特徴 ─── -->
+<section id="features" class="section">
+  <div class="container">
+    <h2 class="section-title">特徴</h2>
+    <div class="features-grid">
+      <div class="feature">
+        <div class="feature-icon">⏰</div>
+        <h3>毎日自動DL</h3>
+        <p>launchd / cron で朝9時に新エピソードを取得。スリープから復帰後も追いかけ実行。</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">🎙</div>
+        <h3>無劣化保存</h3>
+        <p>配信そのままの AAC を <code>.m4a</code> で保存。5分番組で約1.7MB。mp3変換も可能。</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">📱</div>
+        <h3>iPhone で Podcast</h3>
+        <p>RSSフィードを自動生成。Apple Podcasts で「URLから追加」して外でオフライン再生。</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">🌐</div>
+        <h3>Web UI</h3>
+        <p>ブラウザで番組選択・DL実行・QRコード表示。ターミナル不要で全機能操作可能。</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">🎶</div>
+        <h3>Apple Music 対応</h3>
+        <p>メタデータ + 番組ロゴ埋め込み済み。ライブラリに追加するだけでアルバム化。</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">🔁</div>
+        <h3>再放送スキップ</h3>
+        <p>半期で同じ番組が繰り返されても重複DLしない。短いDLは自動リトライ。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── インストール ─── -->
+<section id="install" class="section section-alt">
+  <div class="container">
+    <h2 class="section-title">インストール</h2>
+    <p class="section-lead">ターミナルに1行コピペするだけ。<br>不足する依存があれば、それを画面に表示して案内します（勝手にインストールはしません）。</p>
+
+    <div class="install-box wide" id="install-section">
+      <div class="install-prompt">$</div>
+      <code id="install-cmd2">/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/asari-mtr/nhk_gogaku_2026/main/bootstrap.sh)"</code>
+      <button class="copy-btn" data-copy="#install-cmd2" aria-label="コマンドをコピー">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+        <span class="copy-label">コピー</span>
+      </button>
+    </div>
+
+    <h3 class="sub-title">必要な外部ツール</h3>
+    <div class="tools-table">
+      <table>
+        <thead>
+          <tr><th>ツール</th><th>用途</th><th>必須 / 任意</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>git</code></td><td>GitHub から取得 / 更新</td><td>必須</td></tr>
+          <tr><td><code>curl</code></td><td>bootstrap.sh / API アクセス</td><td>必須</td></tr>
+          <tr><td><code>python3</code> (3.10+)</td><td>スクリプト実行 (標準ライブラリのみ)</td><td>必須</td></tr>
+          <tr><td><code>ffmpeg</code></td><td>HLS (AES-128) 復号 + m4a/mp3 変換</td><td>必須</td></tr>
+          <tr><td><code>uv</code></td><td>manage_series.py (CLI 番組選択) 用</td><td>任意 (Web UI のみなら不要)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="sub-title">OS別 インストールコマンド</h3>
+    <div class="os-grid">
+      <div class="os-card">
+        <div class="os-name">macOS</div>
+        <pre><code>brew install git curl python ffmpeg uv</code></pre>
+      </div>
+      <div class="os-card">
+        <div class="os-name">Ubuntu / Debian</div>
+        <pre><code>sudo apt install git curl python3 ffmpeg
+curl -LsSf https://astral.sh/uv/install.sh | sh</code></pre>
+      </div>
+      <div class="os-card">
+        <div class="os-name">Fedora / RHEL</div>
+        <pre><code>sudo dnf install git curl python3 ffmpeg
+curl -LsSf https://astral.sh/uv/install.sh | sh</code></pre>
+      </div>
+      <div class="os-card">
+        <div class="os-name">Arch / Manjaro</div>
+        <pre><code>sudo pacman -S git curl python ffmpeg uv</code></pre>
+      </div>
+    </div>
+
+    <div class="callout">
+      <strong>Windows ネイティブ環境では動きません。</strong>
+      PowerShell（管理者）で <code>wsl --install -d Ubuntu</code> を実行して WSL を入れてから、その中で上記コマンドを実行してください。
+    </div>
+  </div>
+</section>
+
+<!-- ─── 使い方 ─── -->
+<section id="how" class="section">
+  <div class="container">
+    <h2 class="section-title">使い方</h2>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h3>インストールコマンドを実行</h3>
+          <p>上のワンライナーをターミナルにコピペ。対話形式で<strong>スケジューラ・実行時刻・保存形式・mp3ビットレート</strong>を聞かれます。迷ったら Enter 連打で OK。</p>
+          <div class="step-mock">
+            <div class="mock-line">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</div>
+            <div class="mock-line">  🎙 NHK 語学ダウンローダ - セットアップ</div>
+            <div class="mock-line">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</div>
+            <div class="mock-line">▶ スケジューラを選んでください</div>
+            <div class="mock-line">  1) launchd <span class="mock-recommend">★recommend</span></div>
+            <div class="mock-line">  2) cron</div>
+            <div class="mock-line">▶ DL実行時刻 (HH:MM)</div>
+            <div class="mock-line">  時刻 [09:00]: </div>
+            <div class="mock-line">▶ 保存形式</div>
+            <div class="mock-line">  1) m4a <span class="mock-recommend">★recommend</span></div>
+            <div class="mock-line">  2) mp3</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <h3>ブラウザで Web UI を開く</h3>
+          <p><code>http://&lt;Mac名&gt;:8123/</code> でアクセス。「番組」タブで NHK 全番組 (10言語) から取得したいものをチェックボックスで選択。</p>
+          <div class="step-mock browser-mock">
+            <div class="browser-bar">
+              <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+              <span class="browser-url">http://MacBook-Pro:8123/</span>
+            </div>
+            <div class="browser-content">
+              <div class="ui-tab-bar">
+                <span class="ui-tab">🏠 ホーム</span>
+                <span class="ui-tab active">📻 番組</span>
+                <span class="ui-tab">📱 購読URL</span>
+                <span class="ui-tab">🗂 履歴</span>
+              </div>
+              <div class="ui-section">
+                <strong>登録番組</strong>
+                <div class="ui-series-row">
+                  ☑ エンジョイ・シンプル・イングリッシュ <span class="chip on">✓ 有効</span> <span class="chip">曜日別</span>
+                </div>
+                <div class="ui-series-row">
+                  ☑ まいにちロシア語 <span class="chip on">✓ 有効</span>
+                </div>
+                <div class="ui-series-row">
+                  ☐ まいにちフランス語
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <h3>iPhone で Podcast 購読</h3>
+          <p>「購読URL」タブの <strong>QRコード</strong> を iPhone のカメラで読み取り、リンクをタップ → Apple Podcasts に追加。これで完了。あとは自動で家のWi-Fiにいる間に新エピソードがiPhoneに同期され、外出先でオフライン再生できます。</p>
+          <div class="step-mock qr-mock">
+            <div class="qr-placeholder">
+              <div class="qr-grid"></div>
+              <p>📱 podcast:// で<br>ワンタップ購読</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── プレビュー ─── -->
+<section class="section section-alt">
+  <div class="container">
+    <h2 class="section-title">Web UI プレビュー</h2>
+    <p class="section-lead">タブ式のシンプルなインターフェース。落ち着いた配色と大きめのタッチターゲットで、学生から年配の方まで使えるデザインです。</p>
+
+    <div class="ui-preview">
+      <div class="ui-preview-card">
+        <div class="ui-preview-head">
+          <span>🎙 NHK 語学</span>
+          <span class="ui-pill">● 稼働中</span>
+          <span class="ui-button">▶ DL実行</span>
+        </div>
+        <div class="ui-tab-bar">
+          <span class="ui-tab active">🏠 ホーム</span>
+          <span class="ui-tab">📻 番組</span>
+          <span class="ui-tab">📱 購読URL</span>
+          <span class="ui-tab">🗂 履歴</span>
+        </div>
+        <div class="ui-kpi-row">
+          <div class="ui-kpi"><div class="ui-kpi-label">DL済</div><div class="ui-kpi-value">9</div><div class="ui-kpi-sub">本</div></div>
+          <div class="ui-kpi"><div class="ui-kpi-label">登録番組</div><div class="ui-kpi-value">2</div><div class="ui-kpi-sub">番組</div></div>
+          <div class="ui-kpi"><div class="ui-kpi-label">最終DL</div><div class="ui-kpi-value-sm">5/26 9:00</div></div>
+        </div>
+        <div class="ui-section">
+          <strong>最近のエピソード</strong>
+          <div class="ui-ep">
+            <div>
+              <div class="ui-ep-title">2026-05-26(火) 「シンデレラアプリ 後編」</div>
+              <div class="muted small">エンジョイ・シンプル・イングリッシュ</div>
+            </div>
+            <div class="muted small">5/26</div>
+          </div>
+          <div class="ui-ep">
+            <div>
+              <div class="ui-ep-title">2026-05-26(火) 初級編 入門イタリア語 (23)</div>
+              <div class="muted small">まいにちイタリア語</div>
+            </div>
+            <div class="muted small">5/26</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── 対応OS ─── -->
+<section class="section">
+  <div class="container">
+    <h2 class="section-title">対応環境</h2>
+    <div class="os-badges">
+      <div class="os-badge"><span class="os-emoji">🍎</span><strong>macOS</strong><span class="muted small">launchd で常駐</span></div>
+      <div class="os-badge"><span class="os-emoji">🐧</span><strong>Linux</strong><span class="muted small">Debian / Fedora / Arch / openSUSE 系</span></div>
+      <div class="os-badge"><span class="os-emoji">🪟</span><strong>WSL</strong><span class="muted small">Windows + Ubuntu</span></div>
+      <div class="os-badge"><span class="os-emoji">📱</span><strong>iPhone / iPad</strong><span class="muted small">Apple Podcasts で聴く</span></div>
+      <div class="os-badge"><span class="os-emoji">🤖</span><strong>Android</strong><span class="muted small">Pocket Casts / AntennaPod</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── FAQ ─── -->
+<section id="faq" class="section section-alt">
+  <div class="container">
+    <h2 class="section-title">FAQ</h2>
+    <details class="faq">
+      <summary>これは NHK 公式のツールですか？</summary>
+      <p>いいえ、有志による <strong>非公式</strong> ツールです。生成される Podcast フィードのタイトルにも <code>[非公式]</code> を付け、作者は <code>Personal Archive</code> として明示しています。NHK の聴き逃し配信を私的利用の範囲でローカル保存することを目的としています。</p>
+    </details>
+    <details class="faq">
+      <summary>外でも聴けますか？</summary>
+      <p>はい。iPhone の Apple Podcasts に購読 → 家のWi-Fi圏内にいる間に自動DL → 外出先で<strong>オフライン再生</strong>できます。同様に Pocket Casts や Overcast でも可能です。</p>
+    </details>
+    <details class="faq">
+      <summary>どの番組が取れますか？</summary>
+      <p>NHK ラジオの語学番組ほぼすべて。<strong>英語・中国語・ハングル・フランス語・ドイツ語・イタリア語・スペイン語・ポルトガル語・ロシア語・タイ語</strong> (10言語、18番組) に対応。Web UI 上のチェックボックスで選択するだけです。</p>
+    </details>
+    <details class="faq">
+      <summary>音質は？</summary>
+      <p>NHK の配信そのまま (AAC 48kbps) を <strong>無劣化</strong> で保存します。語学番組に十分な音質で、5分番組で約1.7MB。mp3変換も可能 (64/128/192 kbps から選択)。</p>
+    </details>
+    <details class="faq">
+      <summary>常に Mac を起動しておく必要がありますか？</summary>
+      <p>launchd を使えば <strong>スリープ中はジョブが待機 → 起床後すぐ追いかけ実行</strong> されるので、必要なときだけMacを開けば十分です。完全シャットダウンでなければOK。</p>
+    </details>
+    <details class="faq">
+      <summary>もっと簡単な配布形式 (バイナリ) はありますか？</summary>
+      <p>現状はソーススクリプト形式のみ。<code>ffmpeg</code> は別途インストールが必要なため、Python だけバイナリ化しても根本的な依存は減らせません。macOS/Linux はだいたい Python 3 が標準で入っているので、現状の形が最もシンプルです。</p>
+    </details>
+    <details class="faq">
+      <summary>アンインストールは？</summary>
+      <p><code>./scripts/uninstall.sh</code> で launchd / cron から解除されます。DL済みファイル (downloads/) は明示的に削除しない限り残ります。</p>
+    </details>
+  </div>
+</section>
+
+<!-- ─── FOOTER ─── -->
+<footer class="footer">
+  <div class="container footer-inner">
+    <div>
+      <strong>nhk_gogaku_2026</strong> ·
+      <a href="https://github.com/asari-mtr/nhk_gogaku_2026" target="_blank" rel="noopener">GitHub</a>
+    </div>
+    <div class="muted small">
+      これは NHK 公式ではない有志プロジェクトです。取得した音声はNHKの著作物のため、再配布せず私的利用の範囲でご使用ください。
+    </div>
+  </div>
+</footer>
+
+<script src="app.js?v=1"></script>
+</body>
+</html>
