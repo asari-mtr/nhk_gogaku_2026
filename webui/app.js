@@ -40,6 +40,45 @@ const api = {
     }).then((r) => r.json()),
 };
 
+// ─── 再生速度 (全audio要素にグローバル適用、localStorage永続化) ───
+function getPlaybackRate() {
+  const v = parseFloat(localStorage.getItem("playbackRate"));
+  return Number.isFinite(v) && v > 0 ? v : 1;
+}
+function setPlaybackRate(rate) {
+  localStorage.setItem("playbackRate", String(rate));
+  applyPlaybackRateToAll(rate);
+  updateSpeedButtonsUI(rate);
+}
+function applyPlaybackRateToAll(rate) {
+  document.querySelectorAll("audio").forEach((a) => {
+    try { a.playbackRate = rate; } catch {}
+  });
+}
+function updateSpeedButtonsUI(rate) {
+  $$(".speed-btn").forEach((b) => {
+    const isActive = Math.abs(parseFloat(b.dataset.speed) - rate) < 0.001;
+    b.classList.toggle("active", isActive);
+    b.setAttribute("aria-pressed", isActive ? "true" : "false");
+  });
+}
+// 新規挿入されたaudioにも自動適用
+const audioObserver = new MutationObserver((muts) => {
+  const rate = getPlaybackRate();
+  if (rate === 1) return; // 1xならデフォルトで既にOK
+  muts.forEach((m) => {
+    m.addedNodes.forEach((node) => {
+      if (node.nodeType !== 1) return;
+      if (node.tagName === "AUDIO") {
+        try { node.playbackRate = rate; } catch {}
+      }
+      node.querySelectorAll && node.querySelectorAll("audio").forEach((a) => {
+        try { a.playbackRate = rate; } catch {}
+      });
+    });
+  });
+});
+
 // ─── ステータスピル ───
 async function loadStatus() {
   let s;
@@ -587,6 +626,18 @@ document.addEventListener("DOMContentLoaded", () => {
   $("#qr-close").addEventListener("click", closeQR);
   $("#host-toggle").addEventListener("click", cycleHostMode);
   $("#dl-close").addEventListener("click", () => $("#dl-panel").classList.add("hidden"));
+
+  // 再生速度ボタン
+  $$(".speed-btn").forEach((b) => {
+    b.addEventListener("click", () => setPlaybackRate(parseFloat(b.dataset.speed)));
+  });
+  // 初期速度を復元
+  const initialRate = getPlaybackRate();
+  updateSpeedButtonsUI(initialRate);
+  // 後から差し込まれる audio にも自動適用
+  audioObserver.observe(document.body, { childList: true, subtree: true });
+  // 既存にも適用
+  applyPlaybackRateToAll(initialRate);
 
   updateHostToggleUI();
   // 前回のタブを復元

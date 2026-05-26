@@ -180,10 +180,11 @@ cd <配置したパス>
   --scheduler launchd --hour 7 --minute 30 --format mp3 --mp3-bitrate 128k
 ```
 
-#### 確認 / アンインストール
+#### 確認 / 更新 / アンインストール
 
 ```sh
 ./scripts/status.sh      # 現在の設定と稼働状況
+./scripts/update.sh      # git pull で最新化 + サーバ再起動 (設定/DL済は維持)
 ./scripts/uninstall.sh   # スケジューラから解除（DL済ファイルは残る）
 ```
 
@@ -381,6 +382,7 @@ nhk_gogaku_2026/
 │   ├── install.sh                  #   対話的にスケジューラ/時刻/形式を選択
 │   ├── _install_launchd.sh         #   launchd登録の内部スクリプト
 │   ├── _install_cron.sh            #   cron登録の内部スクリプト
+│   ├── update.sh                   #   git pull で最新化 + サーバ再起動
 │   ├── uninstall.sh                #   launchd/cron両方からアンインストール
 │   └── status.sh                   #   稼働状況確認
 ├── config.json                     # install.sh が生成 (format / bitrate / schedule)
