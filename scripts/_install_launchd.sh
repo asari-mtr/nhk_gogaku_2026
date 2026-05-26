@@ -9,8 +9,7 @@ LAUNCH_DIR="$HOME/Library/LaunchAgents"
 mkdir -p "$LAUNCH_DIR"
 
 # 既存をクリーンアップ
-for label in "$LABEL_DL" "$LABEL_SERVER" \
-             "com.mitsuteru.nhk-gogaku" "com.mitsuteru.nhk-server"; do
+for label in "$LABEL_DL" "$LABEL_SERVER"; do
   if launchctl print "gui/$(id -u)/$label" >/dev/null 2>&1; then
     echo "→ 既存 $label を停止"
     launchctl bootout "gui/$(id -u)/$label" 2>/dev/null || true
