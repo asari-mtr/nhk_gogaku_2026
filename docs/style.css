@@ -33,20 +33,29 @@
   }
 }
 
-/* ─── アクセシビリティ: skip link ─── */
+/* ─── アクセシビリティ: skip link (キーボードユーザーがナビを飛ばす) ─── */
+/* 通常は完全に画面外。Tab でフォーカスが当たった時のみスライドイン */
 .skip-link {
-  position: absolute;
-  top: -40px;
+  position: fixed;
+  top: 0;
   left: 8px;
+  transform: translateY(-200%);
   background: var(--accent);
   color: #fff !important;
-  padding: 8px 16px;
-  border-radius: 6px;
-  z-index: 1000;
+  padding: 10px 18px;
+  border-radius: 0 0 8px 8px;
+  z-index: 9999;
   text-decoration: none;
   font-weight: 600;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  transition: transform 0.15s ease;
 }
-.skip-link:focus { top: 8px; }
+.skip-link:focus,
+.skip-link:focus-visible {
+  transform: translateY(0);
+  outline: 3px solid #ffd166;
+  outline-offset: 2px;
+}
 
 /* ─── ベース ─── */
 * { box-sizing: border-box; }
