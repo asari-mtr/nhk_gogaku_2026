@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="format-detection" content="telephone=no">
+<meta name="theme-color" content="#f6f4ee">
+<title>NHK 語学ダウンローダ</title>
+<link rel="stylesheet" href="/webui/style.css?v=14">
+</head>
+<body>
+<header class="app-header">
+  <div class="container header-inner">
+    <div class="brand">
+      <span class="brand-icon" aria-hidden="true">🎙</span>
+      <span class="brand-text">NHK 語学</span>
+    </div>
+    <div class="header-actions">
+      <span id="status-pill" class="pill" title="サーバ稼働中">
+        <span class="dot ok"></span><span class="pill-text">稼働中</span>
+      </span>
+      <button id="btn-run" class="primary big" aria-label="今すぐダウンロード実行">
+        <span aria-hidden="true">▶</span>&nbsp;DL実行
+      </button>
+    </div>
+  </div>
+  <!-- タブナビ -->
+  <nav class="tabs container" role="tablist">
+    <button class="tab" data-tab="home" role="tab" aria-selected="true">
+      <span class="tab-icon" aria-hidden="true">🏠</span><span>ホーム</span>
+    </button>
+    <button class="tab" data-tab="series" role="tab">
+      <span class="tab-icon" aria-hidden="true">📻</span><span>番組</span>
+    </button>
+    <button class="tab" data-tab="feeds" role="tab">
+      <span class="tab-icon" aria-hidden="true">📱</span><span>購読URL</span>
+    </button>
+    <button class="tab" data-tab="history" role="tab">
+      <span class="tab-icon" aria-hidden="true">🗂</span><span>履歴</span>
+    </button>
+  </nav>
+</header>
+
+<!-- DL進捗パネル (実行中だけ表示) -->
+<div id="dl-panel" class="dl-panel hidden">
+  <div class="container dl-panel-inner">
+    <div class="dl-head">
+      <span><strong>ダウンロード</strong> <span id="dl-state" class="badge"></span></span>
+      <button id="dl-close" class="icon" aria-label="閉じる">×</button>
+    </div>
+    <pre id="dl-log" class="logbox"></pre>
+  </div>
+</div>
+
+<main class="container app-main">
+
+  <!-- タブ: ホーム -->
+  <section class="tab-panel" id="panel-home" role="tabpanel">
+    <div class="card kpi-row">
+      <div class="kpi">
+        <div class="kpi-label">DL済み</div>
+        <div class="kpi-value" id="kpi-episodes">―</div>
+        <div class="kpi-sub">本</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">登録番組</div>
+        <div class="kpi-value" id="kpi-series">―</div>
+        <div class="kpi-sub">番組</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">最終DL</div>
+        <div class="kpi-value-small" id="kpi-last">未実行</div>
+      </div>
+    </div>
+
+    <!-- 短い/不完全なエピソード警告 -->
+    <div class="card hidden" id="warn-section">
+      <div class="card-head">
+        <h2>⚠ 取得が不完全な可能性</h2>
+        <span class="muted small" id="warn-count"></span>
+      </div>
+      <p class="muted small">
+        想定の半分未満の長さで保存されているエピソードです。
+        次回のDL実行で自動的に再取得を試みます (確定で短い場合は<code>short_confirmed</code>が付き以後スキップ)。
+      </p>
+      <div id="warn-list"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <h2>最近のエピソード</h2>
+        <button class="link" data-jump="history">履歴を見る →</button>
+      </div>
+      <div id="home-episodes"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <h2>最近のログ</h2>
+        <span id="log-date" class="muted small"></span>
+      </div>
+      <pre id="recent-log" class="logbox"></pre>
+    </div>
+  </section>
+
+  <!-- タブ: 番組 -->
+  <section class="tab-panel hidden" id="panel-series" role="tabpanel">
+    <div class="card">
+      <div class="card-head">
+        <h2>登録番組</h2>
+        <button id="btn-edit-series" class="primary">
+          <span aria-hidden="true">＋</span>&nbsp;番組を編集
+        </button>
+      </div>
+      <p class="muted small">チェックを付けた番組が毎日朝9:00に自動DLされます</p>
+      <div id="series-list"></div>
+    </div>
+  </section>
+
+  <!-- タブ: 購読URL -->
+  <section class="tab-panel hidden" id="panel-feeds" role="tabpanel">
+    <div class="card">
+      <div class="card-head">
+        <h2>iPhoneのPodcastアプリで聴く</h2>
+        <button id="host-toggle" class="secondary" aria-label="URLのホスト名形式を切替">URL: ―</button>
+      </div>
+      <ol class="howto">
+        <li><strong>iPhone・MacのSafariで開いている場合</strong>: 各番組の「🎧 Apple Podcasts で開く」をタップ → そのまま購読確認</li>
+        <li><strong>別の端末から購読したい場合</strong>: 「QRコード」ボタンで2種類のQRを表示。
+          <ul>
+            <li>Apple Podcasts (iPhone/iPad/Mac) → 上のQR (ワンタップ購読)</li>
+            <li>その他のアプリ (Pocket Casts / Overcast / Spotify / Android系) → 下のQR (汎用URL)</li>
+          </ul>
+        </li>
+      </ol>
+      <p class="muted small">※URLが解決できない場合は右上ボタンで形式を切替（ホスト名 / .local / IPアドレス）</p>
+      <div id="feeds-list"></div>
+    </div>
+  </section>
+
+  <!-- タブ: 履歴 -->
+  <section class="tab-panel hidden" id="panel-history" role="tabpanel">
+    <div class="card">
+      <div class="card-head">
+        <h2>ダウンロード済みエピソード</h2>
+        <span class="muted small" id="ep-count"></span>
+      </div>
+      <div id="episodes"></div>
+    </div>
+  </section>
+
+</main>
+
+<!-- 番組編集モーダル -->
+<div id="modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+  <div class="modal-content">
+    <div class="modal-head">
+      <h2 id="modal-title">番組を編集</h2>
+      <button id="modal-close" class="icon" aria-label="閉じる">×</button>
+    </div>
+    <div class="modal-body">
+      <p class="muted small">NHKの全番組リストから選択。チェックを付けた番組が次回DL対象になります。</p>
+      <div id="modal-programs"></div>
+      <hr>
+      <h3>曜日別フォルダに分ける</h3>
+      <p class="muted small">「エンジョイ・シンプル・イングリッシュ」のように曜日でテーマが違う番組向け</p>
+      <div id="modal-weekday"></div>
+    </div>
+    <div class="modal-foot">
+      <button id="modal-cancel" class="secondary">キャンセル</button>
+      <button id="modal-save" class="primary">保存する</button>
+    </div>
+  </div>
+</div>
+
+<!-- QRモーダル -->
+<div id="qr-modal" class="modal hidden" role="dialog" aria-modal="true">
+  <div class="modal-content qr-content">
+    <div class="modal-head">
+      <h2 id="qr-title">購読URL</h2>
+      <button id="qr-close" class="icon" aria-label="閉じる">×</button>
+    </div>
+    <div class="modal-body qr-body">
+      <!-- Apple Podcasts 用 (podcast://) -->
+      <div class="qr-block">
+        <div class="qr-label">
+          <strong>Apple Podcasts でワンタップ購読</strong>
+          <span class="muted small">iPhone / Mac の Apple Podcasts に直接登録できます</span>
+        </div>
+        <div id="qr-canvas-podcast" class="qr-canvas"></div>
+        <p id="qr-url-podcast" class="url-text"></p>
+        <div class="qr-actions">
+          <a id="qr-open-podcast" class="btn primary" href="#">🎧 Apple Podcasts で開く</a>
+          <button class="secondary" data-copy="podcast">URLをコピー</button>
+        </div>
+      </div>
+
+      <hr>
+
+      <!-- 汎用URL (http://) -->
+      <div class="qr-block">
+        <div class="qr-label">
+          <strong>その他のアプリ用 (汎用URL)</strong>
+          <span class="muted small">Pocket Casts、Overcast、Spotify、Android のPodcastアプリ など</span>
+        </div>
+        <div id="qr-canvas-http" class="qr-canvas"></div>
+        <p id="qr-url-http" class="url-text"></p>
+        <div class="qr-actions">
+          <button class="secondary" data-copy="http">URLをコピー</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
+<script src="/webui/app.js?v=14"></script>
+</body>
+</html>
