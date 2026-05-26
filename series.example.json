@@ -1,0 +1,12 @@
+{
+  "_comment": "このファイルは series.json の書式サンプルです。初回起動後は Web UI から番組を追加できるので、このファイル自体を編集する必要はありません。",
+  "series": [
+    {
+      "id": "BR8Z3NX7XM",
+      "name": "エンジョイ・シンプル・イングリッシュ",
+      "page_url": "https://www.nhk.jp/p/rs/BR8Z3NX7XM/plus/",
+      "enabled": true,
+      "group_by_weekday": true
+    }
+  ]
+}

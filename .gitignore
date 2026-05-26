@@ -1,0 +1,32 @@
+# 個人データ (各環境固有のため公開しない)
+/downloads/
+/feeds/
+/state/
+/logs/
+
+# install.sh が生成する個人設定
+/config.json
+/series.json
+
+# ローカルの launchd エージェント (個人パス入り)
+/*.plist
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+
+# OS / エディタ
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# 一時ファイル
+*.part
+*.retag
+*.tmp
