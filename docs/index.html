@@ -1,20 +1,221 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="ja" prefix="og: https://ogp.me/ns#">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#f6f4ee">
-<meta name="description" content="NHKラジオ語学番組の聴き逃し配信を Mac/Linux で自動DL、iPhone の Podcast アプリで聴く。Web UI 付きのオープンソースツール。">
-<meta property="og:title" content="nhk_gogaku_2026">
-<meta property="og:description" content="NHKラジオ語学を毎日自動DL、iPhoneのPodcastアプリで聴く。">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+<!-- ─── Primary Meta ─── -->
+<title>NHK ラジオ語学を毎日自動ダウンロード → iPhone Podcast でオフライン再生 | nhk_gogaku_2026</title>
+<meta name="description" content="NHKラジオ語学番組(基礎英語・ラジオ英会話・まいにち中国語・ハングル・ロシア語など10言語18番組)の聴き逃し配信を Mac / Linux で毎日自動ダウンロード。iPhone Apple Podcasts で外出先でもオフライン再生。無料・オープンソース・Web UI 付き。">
+<meta name="keywords" content="NHK 語学,NHK ラジオ,聴き逃し,ダウンロード,基礎英語,ラジオ英会話,エンジョイシンプルイングリッシュ,まいにち中国語,まいにちハングル,まいにちフランス語,まいにちドイツ語,まいにちイタリア語,まいにちスペイン語,まいにちロシア語,Podcast,iPhone,Apple Podcasts,m4a,mp3,Mac,Linux,自動DL,語学学習,音声配信,RSS">
+<meta name="author" content="asari-mtr">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="googlebot" content="index, follow">
+<meta name="theme-color" content="#2f6b4f">
+<meta name="color-scheme" content="light dark">
+<meta name="format-detection" content="telephone=no">
+<link rel="canonical" href="https://asari-mtr.github.io/nhk_gogaku_2026/">
+<link rel="alternate" hreflang="ja" href="https://asari-mtr.github.io/nhk_gogaku_2026/">
+<link rel="alternate" hreflang="x-default" href="https://asari-mtr.github.io/nhk_gogaku_2026/">
+
+<!-- ─── Open Graph (Facebook / LINE / Slack) ─── -->
 <meta property="og:type" content="website">
-<title>nhk_gogaku_2026 - NHK語学を自動DL → iPhoneでPodcast</title>
-<link rel="stylesheet" href="style.css?v=1">
+<meta property="og:site_name" content="nhk_gogaku_2026">
+<meta property="og:title" content="NHK ラジオ語学を毎日自動DL → iPhone Podcast で聴く">
+<meta property="og:description" content="NHKラジオ語学(10言語18番組)を Mac で自動ダウンロード。iPhone の Apple Podcasts でオフライン再生できる、無料・オープンソースのツール。">
+<meta property="og:url" content="https://asari-mtr.github.io/nhk_gogaku_2026/">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:image" content="https://asari-mtr.github.io/nhk_gogaku_2026/images/og.svg">
+<meta property="og:image:type" content="image/svg+xml">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="nhk_gogaku_2026 - NHKラジオ語学を自動DLしてiPhone Podcastで聴く">
+
+<!-- ─── Twitter Card ─── -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="NHK ラジオ語学を毎日自動DL → iPhone Podcast で聴く">
+<meta name="twitter:description" content="NHKラジオ語学(10言語18番組)の聴き逃し配信を Mac/Linux で自動DL、iPhoneでオフライン再生。Web UI付き OSS。">
+<meta name="twitter:image" content="https://asari-mtr.github.io/nhk_gogaku_2026/images/og.svg">
+<meta name="twitter:image:alt" content="nhk_gogaku_2026 のスクリーンショット">
+
+<!-- ─── Favicon (SVG絵文字) ─── -->
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Ctext%20y%3D%22.9em%22%20font-size%3D%2290%22%3E%F0%9F%8E%99%3C%2Ftext%3E%3C%2Fsvg%3E">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Ctext%20y%3D%22.9em%22%20font-size%3D%2290%22%3E%F0%9F%8E%99%3C%2Ftext%3E%3C%2Fsvg%3E">
+
+<!-- ─── Performance hints ─── -->
+<link rel="preconnect" href="https://github.com" crossorigin>
+<link rel="dns-prefetch" href="https://raw.githubusercontent.com">
+
+<!-- ─── Style ─── -->
+<link rel="stylesheet" href="style.css?v=3">
+
+<!-- ─── JSON-LD: SoftwareApplication ─── -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "nhk_gogaku_2026",
+  "alternateName": ["NHK 語学ダウンローダ", "NHK gogaku downloader"],
+  "applicationCategory": "MultimediaApplication",
+  "applicationSubCategory": "PodcastApp",
+  "operatingSystem": "macOS, Linux, WSL",
+  "description": "NHKラジオ語学番組(基礎英語、ラジオ英会話、まいにち中国語、まいにちハングル、まいにちフランス語、まいにちドイツ語、まいにちイタリア語、まいにちスペイン語、まいにちロシア語、エンジョイシンプルイングリッシュなど10言語18番組)の聴き逃し配信を、Mac または Linux に常駐させて毎日自動ダウンロードし、iPhone の Apple Podcasts や Pocket Casts、AntennaPod などで外出先でもオフライン再生できるオープンソースツール。",
+  "url": "https://asari-mtr.github.io/nhk_gogaku_2026/",
+  "downloadUrl": "https://github.com/asari-mtr/nhk_gogaku_2026",
+  "softwareVersion": "1.0",
+  "datePublished": "2026-05-26",
+  "inLanguage": "ja",
+  "isAccessibleForFree": true,
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "JPY"
+  },
+  "author": {
+    "@type": "Person",
+    "name": "asari-mtr",
+    "url": "https://github.com/asari-mtr"
+  },
+  "featureList": [
+    "毎日朝9時の自動ダウンロード (launchd / cron)",
+    "AAC 無変換 m4a 保存 (5分番組で約1.7MB、無劣化)",
+    "mp3 変換オプション (64/128/192 kbps)",
+    "iPhone Apple Podcasts 向けRSSフィード自動生成",
+    "Apple Music ライブラリへの一括取り込み対応",
+    "Web UI による番組選択 / DL実行 / QR表示 (ターミナル不要)",
+    "再放送スキップ (半期同タイトル自動検知)",
+    "ローカル HTTPサーバで同一Wi-Fi内に配信",
+    "10言語18番組対応 (英語、中国語、ハングル、フランス語、ドイツ語、イタリア語、スペイン語、ポルトガル語、ロシア語、タイ語)"
+  ],
+  "keywords": "NHK 語学, ラジオ, 聴き逃し, Podcast, iPhone, 基礎英語, 語学学習"
+}
+</script>
+
+<!-- ─── JSON-LD: FAQPage ─── -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "これは NHK 公式のツールですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "いいえ、有志による非公式ツールです。生成される Podcast フィードのタイトルにも [非公式] を付け、作者は Personal Archive として明示しています。NHK の聴き逃し配信を私的利用の範囲でローカル保存することを目的としています。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "外でも聴けますか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "はい。iPhone の Apple Podcasts に購読すれば、家のWi-Fi圏内にいる間に自動DLされ、外出先でオフライン再生できます。Pocket Casts や Overcast でも同様です。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "どの番組が取れますか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "NHK ラジオの語学番組ほぼすべて。英語、中国語、ハングル、フランス語、ドイツ語、イタリア語、スペイン語、ポルトガル語、ロシア語、タイ語の10言語18番組に対応します。Web UI のチェックボックスで選択するだけです。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "音質はどうですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "NHK の配信そのまま(AAC 48kbps)を無劣化で保存します。語学番組に十分な音質で、5分番組で約1.7MB。必要に応じて mp3 変換(64/128/192 kbps から選択)も可能です。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "常に Mac を起動しておく必要がありますか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "launchd を使えばスリープ中はジョブが待機、起床後すぐ追いかけ実行されます。完全にシャットダウンしていなければ問題ありません。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Windows でも使えますか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Windowsネイティブでは動きません。WSL (Windows Subsystem for Linux) を導入すれば同じワンライナーで動作します。"
+      }
+    }
+  ]
+}
+</script>
+
+<!-- ─── JSON-LD: HowTo ─── -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  "name": "NHK ラジオ語学を自動ダウンロードして iPhone で聴く方法",
+  "description": "Mac または Linux に nhk_gogaku_2026 をインストールして、iPhone の Apple Podcasts で NHK ラジオ語学番組を聴く手順",
+  "totalTime": "PT5M",
+  "supply": [
+    {"@type": "HowToSupply", "name": "Mac or Linux PC"},
+    {"@type": "HowToSupply", "name": "iPhone (Apple Podcasts)"},
+    {"@type": "HowToSupply", "name": "家庭内 Wi-Fi"}
+  ],
+  "tool": [
+    {"@type": "HowToTool", "name": "git"},
+    {"@type": "HowToTool", "name": "ffmpeg"},
+    {"@type": "HowToTool", "name": "python3"}
+  ],
+  "step": [
+    {
+      "@type": "HowToStep",
+      "position": 1,
+      "name": "ワンライナーでインストール",
+      "text": "ターミナルに 1行コマンドを貼り付けて実行。対話形式でスケジューラ・実行時刻・保存形式を選択する。",
+      "url": "https://asari-mtr.github.io/nhk_gogaku_2026/#install"
+    },
+    {
+      "@type": "HowToStep",
+      "position": 2,
+      "name": "Web UI で番組を選択",
+      "text": "ブラウザで http://<Mac名>:8123/ を開き、「番組」タブから取得したい語学番組をチェックボックスで選ぶ。",
+      "url": "https://asari-mtr.github.io/nhk_gogaku_2026/#how"
+    },
+    {
+      "@type": "HowToStep",
+      "position": 3,
+      "name": "iPhone で Podcast 購読",
+      "text": "「購読URL」タブのQRコードをiPhoneカメラで読み取り、Apple Podcastsに追加する。以後、家のWi-Fi圏内で自動DLされ外出先でオフライン再生可能。",
+      "url": "https://asari-mtr.github.io/nhk_gogaku_2026/#how"
+    }
+  ]
+}
+</script>
+
+<!-- ─── JSON-LD: BreadcrumbList ─── -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "ホーム",
+      "item": "https://asari-mtr.github.io/nhk_gogaku_2026/"
+    }
+  ]
+}
+</script>
 </head>
 <body>
 
+<a class="skip-link" href="#top">本文へスキップ</a>
+
 <!-- ─── NAV ─── -->
-<nav class="nav">
+<nav class="nav" role="navigation" aria-label="グローバルナビゲーション">
   <div class="container nav-inner">
     <a href="#top" class="brand">
       <span class="brand-icon">🎙</span>
@@ -34,17 +235,17 @@
 </nav>
 
 <!-- ─── HERO ─── -->
-<header id="top" class="hero">
+<header id="top" class="hero" role="banner">
   <div class="container hero-inner">
     <div class="hero-icon" aria-hidden="true">🎙</div>
     <h1 class="hero-title">
       NHK ラジオ語学を、<br>
-      毎日 <span class="accent">自動 DL</span> して <span class="accent">Podcast</span> で聴く。
+      毎日 <span class="accent">自動ダウンロード</span> して <span class="accent">iPhone Podcast</span> で聴く。
     </h1>
     <p class="hero-lead">
-      聴き逃し配信は約1週間で消える。<br>
-      Mac (または Linux) に常駐させて、毎朝勝手にエピソードを蓄積。<br>
-      iPhone の Apple Podcasts で購読すれば、通勤中もオフライン再生できる。
+      <strong>基礎英語・ラジオ英会話・まいにち中国語・ハングル・ロシア語など10言語18番組</strong>に対応。<br>
+      NHK の聴き逃し配信は約1週間で消えるので、Mac (または Linux) に常駐させて毎朝自動で蓄積。<br>
+      iPhone の Apple Podcasts で購読すれば、通勤中もオフラインで聴けます。
     </p>
 
     <!-- Install command box (brew.sh style) -->
@@ -71,9 +272,9 @@
 </header>
 
 <!-- ─── 特徴 ─── -->
-<section id="features" class="section">
+<section id="features" class="section" aria-labelledby="features-title">
   <div class="container">
-    <h2 class="section-title">特徴</h2>
+    <h2 id="features-title" class="section-title">特徴 — NHK 語学を効率よく学習するための機能</h2>
     <div class="features-grid">
       <div class="feature">
         <div class="feature-icon">⏰</div>
@@ -110,9 +311,9 @@
 </section>
 
 <!-- ─── インストール ─── -->
-<section id="install" class="section section-alt">
+<section id="install" class="section section-alt" aria-labelledby="install-title">
   <div class="container">
-    <h2 class="section-title">インストール</h2>
+    <h2 id="install-title" class="section-title">インストール — ターミナルにワンライナーをコピペするだけ</h2>
     <p class="section-lead">ターミナルに1行コピペするだけ。<br>不足する依存があれば、それを画面に表示して案内します（勝手にインストールはしません）。</p>
 
     <div class="install-box wide" id="install-section">
@@ -170,9 +371,9 @@ curl -LsSf https://astral.sh/uv/install.sh | sh</code></pre>
 </section>
 
 <!-- ─── 使い方 ─── -->
-<section id="how" class="section">
+<section id="how" class="section" aria-labelledby="how-title">
   <div class="container">
-    <h2 class="section-title">使い方</h2>
+    <h2 id="how-title" class="section-title">使い方 — Mac で自動DLして iPhone で聴く 3ステップ</h2>
 
     <div class="steps">
       <div class="step">
@@ -308,9 +509,9 @@ curl -LsSf https://astral.sh/uv/install.sh | sh</code></pre>
 </section>
 
 <!-- ─── FAQ ─── -->
-<section id="faq" class="section section-alt">
+<section id="faq" class="section section-alt" aria-labelledby="faq-title">
   <div class="container">
-    <h2 class="section-title">FAQ</h2>
+    <h2 id="faq-title" class="section-title">よくある質問 (FAQ)</h2>
     <details class="faq">
       <summary>これは NHK 公式のツールですか？</summary>
       <p>いいえ、有志による <strong>非公式</strong> ツールです。生成される Podcast フィードのタイトルにも <code>[非公式]</code> を付け、作者は <code>Personal Archive</code> として明示しています。NHK の聴き逃し配信を私的利用の範囲でローカル保存することを目的としています。</p>
@@ -343,18 +544,22 @@ curl -LsSf https://astral.sh/uv/install.sh | sh</code></pre>
 </section>
 
 <!-- ─── FOOTER ─── -->
-<footer class="footer">
+<footer class="footer" role="contentinfo">
   <div class="container footer-inner">
     <div>
-      <strong>nhk_gogaku_2026</strong> ·
-      <a href="https://github.com/asari-mtr/nhk_gogaku_2026" target="_blank" rel="noopener">GitHub</a>
+      <strong>nhk_gogaku_2026</strong> · NHK ラジオ語学 自動ダウンローダー ·
+      <a href="https://github.com/asari-mtr/nhk_gogaku_2026" target="_blank" rel="noopener noreferrer">GitHub</a>
     </div>
+    <nav aria-label="フッターナビ">
+      <a href="#features">特徴</a> · <a href="#install">インストール</a> · <a href="#how">使い方</a> · <a href="#faq">FAQ</a>
+    </nav>
     <div class="muted small">
-      これは NHK 公式ではない有志プロジェクトです。取得した音声はNHKの著作物のため、再配布せず私的利用の範囲でご使用ください。
+      これは NHK 公式ではない有志プロジェクトです。取得した音声は NHK の著作物のため、再配布せず私的利用の範囲でご使用ください。<br>
+      © 2026 <a href="https://github.com/asari-mtr" target="_blank" rel="noopener noreferrer">asari-mtr</a> · オープンソース (MIT-ish)
     </div>
   </div>
 </footer>
 
-<script src="app.js?v=1"></script>
+<script src="app.js?v=2" defer></script>
 </body>
 </html>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f6f4ee"/>
+      <stop offset="100%" stop-color="#e3efe6"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#2f6b4f"/>
+      <stop offset="100%" stop-color="#3d8862"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <!-- 波 -->
+  <path d="M0 500 Q 150 460 300 500 T 600 500 T 900 500 T 1200 500 V 630 H 0 Z" fill="rgba(47,107,79,0.15)"/>
+  <path d="M0 540 Q 150 510 300 540 T 600 540 T 900 540 T 1200 540 V 630 H 0 Z" fill="rgba(47,107,79,0.25)"/>
+  <!-- アイコン -->
+  <text x="100" y="160" font-size="120" font-family="-apple-system, system-ui">🎙</text>
+  <!-- メインタイトル -->
+  <text x="100" y="290" font-size="68" font-weight="800" fill="#0c1410" font-family="-apple-system, system-ui, sans-serif">
+    NHK ラジオ語学を、
+  </text>
+  <text x="100" y="370" font-size="68" font-weight="800" fill="#0c1410" font-family="-apple-system, system-ui, sans-serif">
+    毎日 <tspan fill="url(#accent)">自動DL</tspan> して
+  </text>
+  <text x="100" y="450" font-size="68" font-weight="800" fill="#0c1410" font-family="-apple-system, system-ui, sans-serif">
+    <tspan fill="url(#accent)">iPhone Podcast</tspan> で聴く。
+  </text>
+  <!-- 補足 -->
+  <text x="100" y="560" font-size="28" fill="#5f6b66" font-family="-apple-system, system-ui, sans-serif">
+    10言語18番組 · 無劣化保存 · Web UI付き · オープンソース
+  </text>
+  <!-- 右下ブランド -->
+  <text x="1100" y="600" font-size="22" fill="#2f6b4f" font-weight="700" text-anchor="end" font-family="ui-monospace, monospace">
+    nhk_gogaku_2026
+  </text>
+</svg>

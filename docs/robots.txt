@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://asari-mtr.github.io/nhk_gogaku_2026/sitemap.xml

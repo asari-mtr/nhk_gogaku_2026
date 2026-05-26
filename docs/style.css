@@ -33,6 +33,21 @@
   }
 }
 
+/* ─── アクセシビリティ: skip link ─── */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 8px;
+  background: var(--accent);
+  color: #fff !important;
+  padding: 8px 16px;
+  border-radius: 6px;
+  z-index: 1000;
+  text-decoration: none;
+  font-weight: 600;
+}
+.skip-link:focus { top: 8px; }
+
 /* ─── ベース ─── */
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
