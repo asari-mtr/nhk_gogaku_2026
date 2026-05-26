@@ -279,6 +279,27 @@ button.link:hover { color: var(--accent-hover); background: var(--accent-soft); 
 }
 .series-row .meta .chip.on { background: var(--accent-soft); color: var(--accent); font-weight: 600; }
 
+.nhk-link {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+  background: var(--card);
+  text-decoration: none;
+  white-space: nowrap;
+}
+.nhk-link:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: var(--accent-soft);
+}
+
 /* ─── フィード行 ─── */
 .feed-row {
   padding: 16px 0;

@@ -142,7 +142,9 @@ async function loadSeries() {
     return;
   }
   root.innerHTML = d.series
-    .map((s) => `
+    .map((s) => {
+      const nhkUrl = s.page_url || `https://www.nhk.jp/p/rs/${s.id}/`;
+      return `
     <div class="series-row">
       <div class="info">
         <div class="name">${escapeHtml(s.name)}</div>
@@ -152,7 +154,13 @@ async function loadSeries() {
           <span>DL済 ${s.downloaded_count} 本</span>
         </div>
       </div>
-    </div>`)
+      <a class="nhk-link" href="${escapeAttr(nhkUrl)}"
+         target="_blank" rel="noopener noreferrer" referrerpolicy="no-referrer"
+         title="NHK 公式番組ページを開く (リファラ送信なし)">
+        NHK公式 ↗
+      </a>
+    </div>`;
+    })
     .join("");
 }
 
