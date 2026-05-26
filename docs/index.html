@@ -209,6 +209,47 @@
   ]
 }
 </script>
+
+<!-- ─── Analytics (GitHub Actions が secrets から動的注入。未設定なら何も読み込まない) ─── -->
+<script>
+(function () {
+  // プレースホルダーが置換されていない or 空文字なら何もしない
+  function isSet(v) { return v && v.indexOf("__") !== 0; }
+
+  // Cloudflare Web Analytics
+  var CF_TOKEN = "__CF_ANALYTICS_TOKEN__";
+  if (isSet(CF_TOKEN)) {
+    var s = document.createElement("script");
+    s.defer = true;
+    s.src = "https://static.cloudflareinsights.com/beacon.min.js";
+    s.setAttribute("data-cf-beacon", '{"token":"' + CF_TOKEN + '"}');
+    document.head.appendChild(s);
+  }
+
+  // Google Analytics 4
+  var GA_ID = "__GA_MEASUREMENT_ID__";
+  if (isSet(GA_ID)) {
+    var s2 = document.createElement("script");
+    s2.async = true;
+    s2.src = "https://www.googletagmanager.com/gtag/js?id=" + GA_ID;
+    document.head.appendChild(s2);
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { window.dataLayer.push(arguments); }
+    gtag("js", new Date());
+    gtag("config", GA_ID, { anonymize_ip: true });
+  }
+
+  // GoatCounter (シンプル代替)
+  var GC_URL = "__GOATCOUNTER_URL__";
+  if (isSet(GC_URL)) {
+    var s3 = document.createElement("script");
+    s3.async = true;
+    s3.src = "//gc.zgo.at/count.js";
+    s3.setAttribute("data-goatcounter", GC_URL);
+    document.head.appendChild(s3);
+  }
+})();
+</script>
 </head>
 <body>
 

@@ -412,7 +412,34 @@ nhk_gogaku_2026/
 
 ---
 
-## 12. 開発者向けメモ
+## 12. LP の Analytics トークンを動的注入する
+
+`docs/` のランディングページに Cloudflare Web Analytics / Google Analytics / GoatCounter のいずれかを入れたい場合、**ソースコードにトークンを書かず、GitHub Secrets から自動注入** できます。
+
+### セットアップ
+
+リポジトリ Settings → Secrets and variables → Actions → New repository secret で以下のいずれかを登録:
+
+| Secret 名 | 取得元 |
+|---|---|
+| `CF_ANALYTICS_TOKEN` | Cloudflare → Web Analytics → 新規サイト追加で発行される token |
+| `GA_MEASUREMENT_ID` | GA4 → 管理 → データストリーム → 測定ID (`G-XXXXXXXXXX`) |
+| `GOATCOUNTER_URL` | `https://<your-code>.goatcounter.com/count` |
+
+3つとも登録不要、1つだけでも複数併用でも可。**Secretsはリポジトリにコミットされず、Actionsの実行時にしか参照できない** ので公開リポジトリでも安全です。
+
+### 動作
+
+- main ブランチに `docs/` への変更を push すると Actions が起動
+- secret の値を `docs/index.html` のプレースホルダー (`__CF_ANALYTICS_TOKEN__` 等) に置換
+- Pages へデプロイ
+- secret が未設定なら、本体JSがプレースホルダーを検知してスクリプトを読み込まない (=何も入らない)
+
+ローカルで開いている分にはプレースホルダーのままなのでトラッキングは動作せず、開発時に余計な計測を出さずに済みます。
+
+---
+
+## 13. 開発者向けメモ
 
 - 開発言語: Python 3.10+ (標準ライブラリのみ + ffmpeg)
 - 起動時依存追加なし。`manage_series.py` のみ `uv run` で questionary を解決

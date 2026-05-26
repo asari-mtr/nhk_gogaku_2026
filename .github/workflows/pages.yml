@@ -1,0 +1,71 @@
+name: Deploy LP to GitHub Pages
+
+# docs/ が変更されたら自動デプロイ。
+# CF_ANALYTICS_TOKEN / GA_MEASUREMENT_ID / GOATCOUNTER_URL を
+# リポジトリ Settings > Secrets and variables > Actions に登録すると、
+# ビルド時に index.html のプレースホルダーへ自動注入される。
+# (Secrets はリポジトリの中身に出ない & 公開リポジトリでも安全)
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "docs/**"
+      - ".github/workflows/pages.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Inject analytics tokens from Secrets
+        env:
+          CF_ANALYTICS_TOKEN: ${{ secrets.CF_ANALYTICS_TOKEN }}
+          GA_MEASUREMENT_ID: ${{ secrets.GA_MEASUREMENT_ID }}
+          GOATCOUNTER_URL: ${{ secrets.GOATCOUNTER_URL }}
+        run: |
+          set -e
+          target=docs/index.html
+          # secret が空でもエラーにはしない。空のままなら本体JSが読み込みをスキップ
+          python3 - <<PY
+          import os, pathlib
+          path = pathlib.Path("$target")
+          html = path.read_text(encoding="utf-8")
+          subs = {
+              "__CF_ANALYTICS_TOKEN__": os.environ.get("CF_ANALYTICS_TOKEN", ""),
+              "__GA_MEASUREMENT_ID__":  os.environ.get("GA_MEASUREMENT_ID",  ""),
+              "__GOATCOUNTER_URL__":    os.environ.get("GOATCOUNTER_URL",    ""),
+          }
+          for k, v in subs.items():
+              if k in html:
+                  if v:
+                      print(f"injecting {k}")
+                  html = html.replace(k, v)
+          path.write_text(html, encoding="utf-8")
+          PY
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
